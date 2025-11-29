@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mestra Aurora – Leitura do Destino Coreano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Descubra o que os Quatro Pilares do Destino Coreano revelam sobre sua personalidade, dinheiro, amor, saúde e futuro."
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card: #111827;
+      --accent: #eab308;
+      --accent-soft: rgba(234, 179, 8, 0.1);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --border: #1f2933;
+      --radius-lg: 14px;
+      --radius-xl: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827 0, #020617 50%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: conic-gradient(
+        from 220deg,
+        #facc15,
+        #c4b5fd,
+        #22d3ee,
+        #f97316,
+        #facc15
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px rgba(234, 179, 8, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #0b1120, #020617);
+    }
+
+    .brand-icon span {
+      position: relative;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brand-text-title {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+    }
+
+    .badge {
+      align-self: flex-start;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: linear-gradient(
+        120deg,
+        rgba(15, 23, 42, 0.9),
+        rgba(30, 64, 175, 0.6)
+      );
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    .hero {
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 4vw, 32px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    .hero-highlight {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left, #1f2937, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 13px;
+      color: #e5e7eb;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .hero-highlight-icon {
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    .hero-highlight-strong {
+      font-weight: 600;
+      color: #fef3c7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 900px) {
+      .grid {
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        align-items: flex-start;
+      }
+    }
+
+    .card {
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(17, 24, 39, 0.98)
+      );
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow:
+        0 22px 60px rgba(15, 23, 42, 0.9),
+        0 0 40px rgba(59, 130, 246, 0.25);
+      padding: 20px 18px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      opacity: 0.18;
+      background:
+        radial-gradient(circle at 10% 0, rgba(56, 189, 248, 0.5), transparent 60%),
+        radial-gradient(circle at 90% 0, rgba(234, 179, 8, 0.5), transparent 60%);
+      pointer-events: none;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field-group {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .label-hint {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 13px;
+      padding: 9px 11px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.5);
+      background-color: rgba(15, 23, 42, 0.98);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+      max-height: 180px;
+    }
+
+    .radio-row,
+    .inline-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .radio-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 7px 11px;
+      font-size: 12px;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      transition: background-color 0.15s ease, border-color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .radio-chip input {
+      accent-color: var(--accent);
+    }
+
+    .radio-chip:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.25);
+    }
+
+    .form-row-2 {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (min-width: 600px) {
+      .form-row-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .form-divider {
+      height: 1px;
+      border: none;
+      background: radial-gradient(
+        circle at center,
+        rgba(148, 163, 184, 0.7),
+        transparent 70%
+      );
+      margin: 8px 0 4px;
+    }
+
+    .optional-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 3px 7px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #020617;
+      background: radial-gradient(circle at 10% 0, #fbbf24, #f97316);
+      box-shadow:
+        0 16px 40px rgba(251, 191, 36, 0.55),
+        0 0 20px rgba(253, 224, 71, 0.55);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease,
+        filter 0.1s ease, opacity 0.1s ease;
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow:
+        0 8px 20px rgba(250, 204, 21, 0.5),
+        0 0 14px rgba(250, 250, 46, 0.65);
+      filter: brightness(0.98);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 11px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      cursor: pointer;
+      transition: border-color 0.1s ease, color 0.1s ease, background 0.1s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .small-note {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .small-note strong {
+      color: #e5e7eb;
+    }
+
+    .legal-note {
+      margin-top: 4px;
+      font-size: 10px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .legal-note a {
+      color: #93c5fd;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .side-card {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top, #111827, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 16px 16px 14px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.8);
+    }
+
+    .side-section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .side-title-main {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .side-list {
+      list-style: none;
+      display: grid;
+      gap: 7px;
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .side-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .side-bullet {
+      width: 16px;
+      display: inline-flex;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .chip-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(234, 179, 8, 0.9);
+    }
+
+    .side-cta {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .side-cta strong {
+      color: #e5e7eb;
+    }
+
+    .side-footer {
+      font-size: 10px;
+      color: #6b7280;
+    }
+
+    .side-footer span {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .pill-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 11px;
+      background: rgba(8, 47, 73, 0.8);
+      color: #e0f2fe;
+    }
+
+    .pill-highlight-icon {
+      font-size: 13px;
+    }
+
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .footer-links a:hover {
+      color: #e5e7eb;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .error-message {
+      font-size: 11px;
+      color: var(--danger);
+      display: none;
+    }
+
+    .field-error input,
+    .field-error select,
+    .field-error textarea {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.4);
+    }
+
+    .field-error .error-message {
+      display: block;
+    }
+
+    .result-placeholder {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px dashed rgba(148, 163, 184, 0.5);
+      font-size: 12px;
+      color: var(--muted);
+      display: none;
+      gap: 8px;
+      align-items: flex-start;
+      white-space: pre-wrap;
+    }
+
+    .result-placeholder-icon {
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    .spinner {
+      width: 15px;
+      height: 15px;
+      border-radius: 999px;
+      border: 2px solid rgba(15, 23, 42, 0.4);
+      border-top-color: #facc15;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .result-error {
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    /* Improved accessibility focus styles */
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible,
+    .radio-chip:focus-within {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Checkbox styling */
+    .checkbox-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--accent);
+    }
+
+    .checkbox-container label {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .checkbox-container a {
+      color: #93c5fd;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <span>卜</span>
+        </div>
+        <div>
+          <div class="brand-text-title">Mestra Aurora</div>
+          <div class="brand-text-sub">SaJu Coreano • 4 Pilares do Destino</div>
+        </div>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Leitura automática • Estilo coreano</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1 class="hero-title">
+        Descubra agora o que o <span>Destino Coreano</span> revela sobre você.
+      </h1>
+      <p class="hero-subtitle">
+        Através dos <strong>Quatro Pilares do Destino (SaJu, 사주팔자)</strong>,
+        a Mestra Aurora interpreta sua data e hora de nascimento para revelar
+        traços profundos de <strong>personalidade, dinheiro, amor, saúde e futuro</strong>.
+      </p>
+      <div class="hero-highlight">
+        <div class="hero-highlight-icon">🔮</div>
+        <div>
+          <span class="hero-highlight-strong">Leitura detalhada em poucos segundos.</span><br />
+          Preencha os dados abaixo e receba uma análise completa em PT-BR, com
+          linguagem clara e profundidade oriental.
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- FORM CARD -->
+      <div class="card">
+        <div class="card-content">
+          <form id="saju-form" novalidate>
+            <!-- Dados principais -->
+            <div class="field-group" id="field-nome">
+              <div class="field-label-row">
+                <label for="nome">Seu nome completo *</label>
+              </div>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                placeholder="Ex.: Ana Carolina Silva"
+                autocomplete="name"
+                required
+                aria-required="true"
+              />
+              <div class="error-message">Informe seu nome para uma leitura mais precisa.</div>
+            </div>
+
+            <div class="field-group" id="field-email">
+              <div class="field-label-row">
+                <label for="email">Seu e-mail *</label>
+              </div>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Ex.: seunome@email.com"
+                autocomplete="email"
+                required
+                aria-required="true"
+              />
+              <div class="error-message">Informe um e-mail válido.</div>
+            </div>
+
+            <div class="field-group" id="field-sexo">
+              <div class="field-label-row">
+                <label>Seu sexo *</label>
+              </div>
+              <div class="radio-row" role="radiogroup" aria-label="Seu sexo">
+                <label class="radio-chip">
+                  <input type="radio" name="sexo" value="masculino" required /> Masculino
+                </label>
+                <label class="radio-chip">
+                  <input type="radio" name="sexo" value="feminino" required /> Feminino
+                </label>
+              </div>
+              <div class="error-message">Selecione uma opção.</div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field-group" id="field-data">
+                <div class="field-label-row">
+                  <label for="data_nascimento">Data de nascimento *</label>
+                  <span class="label-hint">Calendário gregoriano</span>
+                </div>
+                <input
+                  type="date"
+                  id="data_nascimento"
+                  name="data_nascimento"
+                  required
+                  aria-required="true"
+                  inputmode="numeric"
+                />
+                <div class="error-message">Informe sua data de nascimento.</div>
+              </div>
+
+              <div class="field-group">
+                <div class="field-label-row">
+                  <label for="tipo_calendario">Tipo de calendário</label>
+                  <span class="label-hint">Se não souber, deixe "Solar".</span>
+                </div>
+                <select id="tipo_calendario" name="tipo_calendario">
+                  <option value="solar" selected>Solar (comum)</option>
+                  <option value="lunar">Lunar (tradicional)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-group" id="field-hora">
+              <div class="field-label-row">
+                <label>Hora de nascimento</label>
+                <span class="label-hint">Se não souber, escolha "Não sei".</span>
+              </div>
+              <div class="radio-row" role="radiogroup" aria-label="Hora de nascimento">
+                <label class="radio-chip">
+                  <input
+                    type="radio"
+                    name="hora_tipo"
+                    value="nao_sei"
+                    checked
+                  />
+                  Não sei a hora
+                </label>
+                <label class="radio-chip">
+                  <input type="radio" name="hora_tipo" value="sei" />
+                  Sei a hora aproximada
+                </label>
+              </div>
+              <div id="hora-input-wrapper" style="margin-top: 6px; display: none;">
+                <input
+                  type="time"
+                  id="hora_nascimento"
+                  name="hora_nascimento"
+                  inputmode="numeric"
+                />
+              </div>
+            </div>
+
+            <hr class="form-divider" />
+
+            <!-- Dados opcionais -->
+            <div class="field-label-row">
+              <span class="label-hint">Para personalização extra (opcional):</span>
+              <span class="optional-tag">Opcional</span>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field-group">
+                <div class="field-label-row">
+                  <label for="estado_civil">Você está em um relacionamento?</label>
+                </div>
+                <select id="estado_civil" name="estado_civil">
+                  <option value="">Prefiro não informar</option>
+                  <option value="solteiro">Solteiro(a)</option>
+                  <option value="namorando">Namorando</option>
+                  <option value="casado">Casado(a)</option>
+                  <option value="separado">Separado(a)</option>
+                  <option value="viuvo">Viúvo(a)</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <div class="field-label-row">
+                  <label for="tempo_relacionamento">
+                    Há quanto tempo está nessa fase?
+                  </label>
+                  <span class="label-hint">Só se quiser detalhar.</span>
+                </div>
+                <input
+                  type="text"
+                  id="tempo_relacionamento"
+                  name="tempo_relacionamento"
+                  placeholder="Ex.: 2 anos, 6 meses, etc."
+                />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <div class="field-label-row">
+                <label for="pergunta">
+                  Faça uma pergunta à Mestra Aurora
+                </label>
+                <span class="label-hint">Ex.: carreira, amor, dinheiro, mudança de cidade…</span>
+              </div>
+              <textarea
+                id="pergunta"
+                name="pergunta"
+                placeholder="Escreva aqui o que mais te preocupa ou o que gostaria que a Mestra analisasse com mais atenção."
+              ></textarea>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field-group">
+                <div class="field-label-row">
+                  <label for="telefone">Número de celular</label>
+                  <span class="label-hint">Para acessar sua leitura depois (opcional).</span>
+                </div>
+                <input
+                  type="tel"
+                  id="telefone"
+                  name="telefone"
+                  placeholder="Ex.: +55 11 99999-9999"
+                  autocomplete="tel"
+                  inputmode="tel"
+                />
+                <div class="error-message">Formato de telefone inválido. Use: +55 11 99999-9999</div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <div class="checkbox-container">
+                <input type="checkbox" id="marketing_consent" name="marketing_consent" />
+                <label for="marketing_consent">
+                  Concordo em receber comunicações espirituais da Mestra Aurora 
+                  (opcional, pode ser cancelado a qualquer momento).
+                </label>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button type="submit" class="btn-primary" id="btn-submit">
+                <span id="btn-spinner" class="spinner" style="display: none;"></span>
+                <span id="btn-text">Ver minha leitura agora</span>
+                <span>✨</span>
+              </button>
+              <p class="small-note">
+                <strong>Privacidade:</strong> as informações inseridas são usadas
+                apenas para calcular e exibir sua leitura. Você pode optar por
+                não informar dados opcionais.
+              </p>
+              <p class="legal-note">
+                Ao continuar, você concorda com os
+                <a href="#termos">Termos de Uso</a> e com a
+                <a href="#privacidade">Política de Privacidade</a> deste serviço
+                de entretenimento espiritual.
+              </p>
+            </div>
+
+            <div class="result-placeholder" id="result-placeholder">
+              <div class="result-placeholder-icon">📜</div>
+              <div id="result-text">
+                <!-- Resultado da IA entra aqui -->
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- SIDE INFO -->
+      <aside class="side-card">
+        <div>
+          <div class="side-section-title">Como funciona</div>
+          <h2 class="side-title-main">O que a Mestra Aurora revela para você:</h2>
+        </div>
+
+        <ul class="side-list">
+          <li>
+            <span class="side-bullet">🧠</span>
+            <span>
+              <strong>Personalidade profunda:</strong> seu elemento principal,
+              traços ocultos e como você reage a desafios e mudanças.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">💰</span>
+            <span>
+              <strong>Dinheiro e carreira:</strong> fases de prosperidade,
+              áreas mais favoráveis para ganhar dinheiro e riscos a evitar.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">💘</span>
+            <span>
+              <strong>Amor e relacionamentos:</strong> seu jeito de amar,
+              com quem combina mais e períodos sensíveis para a vida afetiva.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">🩺</span>
+            <span>
+              <strong>Saúde energética:</strong> pontos vulneráveis segundo os
+              5 elementos (Madeira, Fogo, Terra, Metal, Água) e cuidados simples.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">📅</span>
+            <span>
+              <strong>Próximos anos:</strong> visão resumida do próximo ano e
+              dos próximos 5 anos, com ênfase em oportunidades e alertas.
+            </span>
+          </li>
+        </ul>
+
+        <div class="pill-highlight">
+          <span class="pill-highlight-icon">🌙</span>
+          <span>Baseado na tradição oriental • Entregue em linguagem simples</span>
+        </div>
+
+        <p class="side-cta">
+          <strong>Não é apenas horóscopo.</strong><br />
+          A leitura usa o método dos Quatro Pilares (ano, mês, dia e hora de
+          nascimento), muito popular na Coreia e em outros países asiáticos,
+          agora traduzido para PT-BR.
+        </p>
+
+        <div class="chip-pill">
+          <span class="chip-dot"></span>
+          <span>Leitura gerada automaticamente por IA treinada em SaJu</span>
+        </div>
+
+        <div class="side-footer">
+          Serviço de entretenimento espiritual. Não substitui aconselhamento
+          médico, psicológico, financeiro ou jurídico.<br />
+          <span>Use como insight e reflexão, não como sentença.</span>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div>© 2024 Mestra Aurora • Todos os direitos reservados.</div>
+    <div class="footer-links">
+      <a href="#termos" id="termos">Termos de Uso</a>
+      <a href="#privacidade" id="privacidade">Política de Privacidade</a>
+      <a href="#contato" id="contato">Contato</a>
+    </div>
+  </footer>
+
+  <script>
+    // URL da API - ajusta conforme teu backend
+    const API_ENDPOINT = "http://localhost:3001/api/saju";
+
+    // Mostrar/esconder campo de hora conforme escolha
+    const horaTipoRadios = document.querySelectorAll('input[name="hora_tipo"]');
+    const horaWrapper = document.getElementById("hora-input-wrapper");
+
+    horaTipoRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        if (radio.value === "sei" && radio.checked) {
+          horaWrapper.style.display = "block";
+        } else if (radio.value === "nao_sei" && radio.checked) {
+          horaWrapper.style.display = "none";
+        }
+      });
+    });
+
+    const form = document.getElementById("saju-form");
+    const btnSubmit = document.getElementById("btn-submit");
+    const btnText = document.getElementById("btn-text");
+    const btnSpinner = document.getElementById("btn-spinner");
+    const resultPlaceholder = document.getElementById("result-placeholder");
+    const resultText = document.getElementById("result-text");
+
+    function setLoading(isLoading) {
+      if (isLoading) {
+        btnSubmit.disabled = true;
+        btnSpinner.style.display = "inline-block";
+        btnText.textContent = "Calculando seu destino...";
+      } else {
+        btnSubmit.disabled = false;
+        btnSpinner.style.display = "none";
+        btnText.textContent = "Ver minha leitura agora";
+      }
+    }
+
+    function validateForm() {
+      let isValid = true;
+
+      // Campos obrigatórios: nome, sexo, data, email
+      const fieldNome = document.getElementById("field-nome");
+      const nomeInput = document.getElementById("nome");
+      if (!nomeInput.value.trim()) {
+        fieldNome.classList.add("field-error");
+        isValid = false;
+      } else {
+        fieldNome.classList.remove("field-error");
+      }
+
+      const fieldEmail = document.getElementById("field-email");
+      const emailInput = document.getElementById("email");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value.trim() || !emailRegex.test(emailInput.value)) {
+        fieldEmail.classList.add("field-error");
+        isValid = false;
+      } else {
+        fieldEmail.classList.remove("field-error");
+      }
+
+      const fieldSexo = document.getElementById("field-sexo");
+      const sexoSelected = document.querySelector('input[name="sexo"]:checked');
+      if (!sexoSelected) {
+        fieldSexo.classList.add("field-error");
+        isValid = false;
+      } else {
+        fieldSexo.classList.remove("field-error");
+      }
+
+      const fieldData = document.getElementById("field-data");
+      const dataInput = document.getElementById("data_nascimento");
+      if (!dataInput.value) {
+        fieldData.classList.add("field-error");
+        isValid = false;
+      } else {
+        fieldData.classList.remove("field-error");
+      }
+
+      // Validate date is not in the future
+      if (dataInput.value) {
+        const today = new Date();
+        const birthDate = new Date(dataInput.value);
+        if (birthDate > today) {
+          fieldData.classList.add("field-error");
+          const errorMessage = fieldData.querySelector(".error-message");
+          if (errorMessage) {
+            errorMessage.textContent = "A data de nascimento não pode ser no futuro.";
+          }
+          isValid = false;
+        }
+      }
+
+      // Validate phone number format if provided
+      const telefoneInput = document.getElementById("telefone");
+      if (telefoneInput.value.trim() && !isValidPhoneNumber(telefoneInput.value)) {
+        const fieldTelefone = telefoneInput.closest(".field-group");
+        fieldTelefone.classList.add("field-error");
+        isValid = false;
+      } else if (telefoneInput.value.trim()) {
+        const fieldTelefone = telefoneInput.closest(".field-group");
+        fieldTelefone.classList.remove("field-error");
+      }
+
+      return isValid;
+    }
+
+    function isValidPhoneNumber(phone) {
+      // Simple Brazilian phone validation
+      const phoneRegex = /^\+55\s?\d{2}\s?\d{4,5}-?\d{4}$/;
+      return phoneRegex.test(phone);
+    }
+
+    function collectPayload() {
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const sexo = document.querySelector('input[name="sexo"]:checked')?.value || null;
+      const data_nascimento = document.getElementById("data_nascimento").value || null;
+      const tipo_calendario = document.getElementById("tipo_calendario").value || "solar";
+
+      const horaTipo = document.querySelector('input[name="hora_tipo"]:checked')?.value;
+      const hora_nascimento =
+        horaTipo === "sei"
+          ? document.getElementById("hora_nascimento").value || null
+          : null;
+
+      const estado_civil = document.getElementById("estado_civil").value || null;
+      const tempo_relacionamento =
+        document.getElementById("tempo_relacionamento").value.trim() || null;
+      const pergunta = document.getElementById("pergunta").value.trim() || null;
+      const telefone = document.getElementById("telefone").value.trim() || null;
+      const marketing_consent = document.getElementById("marketing_consent").checked || false;
+
+      return {
+        nome,
+        email,
+        sexo,
+        data_nascimento,
+        tipo_calendario,
+        hora_nascimento,
+        estado_civil,
+        tempo_relacionamento,
+        pergunta,
+        telefone,
+        marketing_consent
+      };
+    }
+
+    async function submitToAPI(payload) {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Falha ao contactar o servidor. Código: " + response.status);
+      }
+
+      // Espera que o backend devolva algo como:
+      // { success: true, leitura: "texto...", email_sent: true }
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || "Não foi possível gerar a leitura.");
+      }
+
+      return data;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      if (!validateForm()) {
+        resultPlaceholder.style.display = "none";
+        return;
+      }
+
+      const payload = collectPayload();
+      setLoading(true);
+      resultPlaceholder.style.display = "none";
+      resultText.classList.remove("result-error");
+      resultText.textContent = "";
+
+      try {
+        const responseData = await submitToAPI(payload);
+        resultText.textContent = responseData.leitura;
+        resultPlaceholder.style.display = "flex";
+        window.scrollTo({
+          top: resultPlaceholder.offsetTop - 40,
+          behavior: "smooth"
+        });
+      } catch (error) {
+        console.error(error);
+        resultText.textContent =
+          "Ocorreu um erro ao gerar sua leitura. Tente novamente em instantes.";
+        resultText.classList.add("result-error");
+        resultPlaceholder.style.display = "flex";
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
