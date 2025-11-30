@@ -133,35 +133,40 @@ Para habilitar o envio real de e-mails:
    cp config.example.js config.js
    ```
 
-2. Edite `config.js` e defina `email.enabled` como `true`
+2. (Opcional) Copie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente:
+   ```bash
+   cp .env.example .env
+   ```
 
-3. Configure as credenciais SMTP no mesmo arquivo:
+3. Edite `config.js` e defina `email.enabled` como `true`
+
+4. Configure as credenciais SMTP no mesmo arquivo ou usando variáveis de ambiente:
    ```javascript
    email: {
      enabled: true,  // Mude para true para habilitar envio real
      smtp: {
-       host: 'smtp.mailersend.net',
-       port: 587,
-       secure: false,
+       host: process.env.SMTP_HOST || 'smtp.mailersend.net',
+       port: process.env.SMTP_PORT || 587,
+       secure: process.env.SMTP_SECURE === 'true' || false,
        auth: {
-         user: 'SEU_USUARIO_MAILERSEND_PARA_mestraaurora.xyz',
-         pass: 'SUA_SENHA_MAILERSEND_PARA_mestraaurora.xyz'
+         user: process.env.SMTP_USER || 'SEU_USUARIO_MAILERSEND_PARA_mestraaurora.xyz',
+         pass: process.env.SMTP_PASS || 'SUA_SENHA_MAILERSEND_PARA_mestraaurora.xyz'
        }
      },
      defaults: {
-       from: '"Mestra Aurora" <noreply@mestraaurora.xyz>'
+       from: process.env.EMAIL_FROM || '"Mestra Aurora" <noreply@mestraaurora.xyz>'
      }
    }
    ```
 
-4. Para usar seu domínio personalizado `mestraaurora.xyz`:
+5. Para usar seu domínio personalizado `mestraaurora.xyz`:
    - Acesse sua conta MailerSend
    - Adicione o domínio `mestraaurora.xyz`
    - Configure os registros DNS necessários (SPF, DKIM, DMARC)
    - Verifique o domínio conforme instruções da MailerSend
    - Obtenha as credenciais SMTP para o domínio
 
-O sistema usará automaticamente as configurações do arquivo `config.js` quando o servidor for iniciado.
+O sistema usará automaticamente as configurações do arquivo `config.js` quando o servidor for iniciado. Se variáveis de ambiente estiverem definidas, elas terão precedência sobre os valores padrão no arquivo de configuração.
 
 ## Contribuição
 
