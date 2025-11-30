@@ -12,7 +12,7 @@ try {
   console.log('Config file not found, using environment variables');
   config = {
     email: {
-      enabled: process.env.EMAIL_ENABLED === 'true' ? true : false,
+      enabled: process.env.EMAIL_ENABLED === 'true' ? true : (process.env.EMAIL_ENABLED === undefined ? true : false),
       smtp: {
         host: process.env.SMTP_HOST || 'smtp.mailersend.net',
         port: process.env.SMTP_PORT || 587,
@@ -48,8 +48,11 @@ const dbConfig = {
   },
   connectionTimeoutMillis: 5000,
   idleTimeoutMillis: 30000,
-  // Prefer IPv4 to avoid ENETUNREACH errors
-  family: 4
+  // Force IPv4 to avoid ENETUNREACH errors
+  family: 4,
+  // Additional connection options to improve reliability
+  max: 20,
+  allowExitOnIdle: false
 };
 
 const pool = new Pool(dbConfig);
