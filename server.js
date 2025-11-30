@@ -1,4 +1,4 @@
-const express = require('express');
+\                       const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -12,7 +12,7 @@ try {
   console.log('Config file not found, using environment variables');
   config = {
     email: {
-      enabled: process.env.EMAIL_ENABLED === 'true',
+      enabled: process.env.EMAIL_ENABLED === 'true' ? true : false,
       smtp: {
         host: process.env.SMTP_HOST || 'smtp.mailersend.net',
         port: process.env.SMTP_PORT || 587,
@@ -45,7 +45,11 @@ const dbConfig = {
   connectionString: config.database.url,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  connectionTimeoutMillis: 5000,
+  idleTimeoutMillis: 30000,
+  // Prefer IPv4 to avoid ENETUNREACH errors
+  family: 4
 };
 
 const pool = new Pool(dbConfig);
