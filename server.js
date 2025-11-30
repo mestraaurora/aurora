@@ -4,11 +4,45 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs').promises;
 const { Pool } = require('pg');
-const config = require('./config'); // Load configuration
+// Load configuration with fallback to environment variables
+let config;
+try {
+  config = require('./config');
+} catch (error) {
+  console.log('Config file not found, using environment variables');
+  config = {
+    email: {
+      enabled: process.env.EMAIL_ENABLED === 'true',
+      smtp: {
+        host: process.env.SMTP_HOST || 'smtp.mailersend.net',
+        port: process.env.SMTP_PORT || 587,
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      },
+      defaults: {
+        from: process.env.EMAIL_FROM
+      }
+    },
+    aiService: {
+      apiUrl: process.env.AI_SERVICE_URL || 'https://api.openai.com/v1/chat/completions',
+      apiKey: process.env.AI_SERVICE_API_KEY,
+      model: process.env.AI_SERVICE_MODEL || 'x-ai/grok-4.1-fast:free'
+    },
+    database: {
+      url: process.env.DATABASE_URL
+    },
+    server: {
+      port: process.env.PORT || 3001
+    }
+  };
+}
 
 // Create database connection pool
 const dbConfig = {
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:07oJPvDGypQ3k2kJ@db.izopejswridzmxuuwozj.supabase.co:5432/postgres',
+  connectionString: config.database.url,
   ssl: {
     rejectUnauthorized: false
   }
