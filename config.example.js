@@ -5,22 +5,22 @@ module.exports = {
   // Email configuration
   email: {
     // Set to true to enable real email sending, false to keep simulation
-    enabled: false,
+    enabled: true,
     
     // SMTP settings (only used if enabled: true)
     smtp: {
-      host: 'smtp.your-email-provider.com',  // e.g., 'smtp.gmail.com' for Gmail
-      port: 587,                             // Common ports: 587 (TLS), 465 (SSL), 25 (unencrypted)
-      secure: false,                         // true for 465, false for other ports
+      host: 'smtp.mailersend.net',  // MailerSend SMTP host
+      port: 587,                             // MailerSend port
+      secure: false,                         // false for port 587
       auth: {
-        user: 'your-email@your-domain.com',
-        pass: 'your-app-password-or-api-key'
+        user: 'YOUR_MAILERSEND_USERNAME_FOR_mestraaurora.xyz',
+        pass: 'YOUR_MAILERSEND_PASSWORD_FOR_mestraaurora.xyz'
       }
     },
     
     // Email defaults
     defaults: {
-      from: '"Mestra Aurora" <noreply@your-domain.com>'
+      from: '"Mestra Aurora" <noreply@mestraaurora.xyz>'
     }
   },
   

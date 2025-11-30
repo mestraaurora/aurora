@@ -899,7 +899,7 @@
                 <input type="checkbox" id="marketing_consent" name="marketing_consent" />
                 <label for="marketing_consent">
                   Concordo em receber comunicações espirituais da Mestra Aurora 
-                  (opcional, pode ser cancelado a qualquer momento).
+                  (obrigatório para receber a leitura).
                 </label>
               </div>
             </div>
@@ -917,8 +917,8 @@
               </p>
               <p class="legal-note">
                 Ao continuar, você concorda com os
-                <a href="#termos">Termos de Uso</a> e com a
-                <a href="#privacidade">Política de Privacidade</a> deste serviço
+                <a href="/terms.html">Termos de Uso</a> e com a
+                <a href="/privacy-policy.html">Política de Privacidade</a> deste serviço
                 de entretenimento espiritual.
               </p>
             </div>
@@ -1007,9 +1007,10 @@
   <footer>
     <div>© 2024 Mestra Aurora • Todos os direitos reservados.</div>
     <div class="footer-links">
-      <a href="#termos" id="termos">Termos de Uso</a>
-      <a href="#privacidade" id="privacidade">Política de Privacidade</a>
-      <a href="#contato" id="contato">Contato</a>
+      <a href="/about.html">Sobre</a>
+      <a href="/terms.html" id="termos">Termos de Uso</a>
+      <a href="/privacy-policy.html" id="privacidade">Política de Privacidade</a>
+      <a href="/contact.html" id="contato">Contato</a>
     </div>
   </footer>
 
@@ -1089,6 +1090,16 @@
         isValid = false;
       } else {
         fieldData.classList.remove("field-error");
+      }
+
+      // Marketing consent is now required
+      const marketingConsent = document.getElementById("marketing_consent");
+      const fieldMarketing = marketingConsent.closest(".field-group");
+      if (!marketingConsent.checked) {
+        fieldMarketing.classList.add("field-error");
+        isValid = false;
+      } else {
+        fieldMarketing.classList.remove("field-error");
       }
 
       // Validate date is not in the future

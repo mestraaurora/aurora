@@ -140,16 +140,26 @@ Para habilitar o envio real de e-mails:
    email: {
      enabled: true,  // Mude para true para habilitar envio real
      smtp: {
-       host: 'smtp.seu-provedor.com',
+       host: 'smtp.mailersend.net',
        port: 587,
        secure: false,
        auth: {
-         user: 'seu-email@seu-dominio.com',
-         pass: 'sua-senha-ou-app-password'
+         user: 'SEU_USUARIO_MAILERSEND_PARA_mestraaurora.xyz',
+         pass: 'SUA_SENHA_MAILERSEND_PARA_mestraaurora.xyz'
        }
+     },
+     defaults: {
+       from: '"Mestra Aurora" <noreply@mestraaurora.xyz>'
      }
    }
    ```
+
+4. Para usar seu domínio personalizado `mestraaurora.xyz`:
+   - Acesse sua conta MailerSend
+   - Adicione o domínio `mestraaurora.xyz`
+   - Configure os registros DNS necessários (SPF, DKIM, DMARC)
+   - Verifique o domínio conforme instruções da MailerSend
+   - Obtenha as credenciais SMTP para o domínio
 
 O sistema usará automaticamente as configurações do arquivo `config.js` quando o servidor for iniciado.
 
@@ -167,6 +177,6 @@ Este projeto é licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE
 
 ## Contato
 
-Mestra Aurora - [seu-email@exemplo.com](mailto:seu-email@exemplo.com)
+Mestra Aurora - [contact@mestraaurora.xyz](mailto:contact@mestraaurora.xyz)
 
 Link do Projeto: [https://github.com/seu-usuario/mestra-aurora](https://github.com/seu-usuario/mestra-aurora)

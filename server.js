@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs').promises;
 const sqlite3 = require('sqlite3').verbose();
-<const config = require('./config'); // Load configuration
+const config = require('./config'); // Load configuration
 
 // Create database
 const db = new sqlite3.Database(config.database.filename);
@@ -39,6 +39,26 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Serve the terms page
+app.get('/terms.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'terms.html'));
+});
+
+// Serve the privacy policy page
+app.get('/privacy-policy.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'privacy-policy.html'));
+});
+
+// Serve the contact page
+app.get('/contact.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'contact.html'));
+});
+
+// Serve the about page
+app.get('/about.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'about.html'));
+});
+
 // Validation helper function
 function validateRequest(req) {
   const errors = [];
@@ -63,6 +83,11 @@ function validateRequest(req) {
     if (!emailRegex.test(req.body.email)) {
       errors.push('E-mail inválido');
     }
+  }
+  
+  // Marketing consent is now required
+  if (req.body.marketing_consent !== true) {
+    errors.push('Você precisa concordar com o recebimento de comunicações para receber a leitura');
   }
   
   return errors;
@@ -311,7 +336,7 @@ async function sendEmail(to, subject, body) {
       const nodemailer = require('nodemailer');
       
       // Create transporter with SMTP settings from config
-      const transporter = nodemailer.createTransporter({
+      const transporter = nodemailer.createTransport({
         host: config.email.smtp.host,
         port: config.email.smtp.port,
         secure: config.email.smtp.secure,
@@ -408,6 +433,68 @@ app.post('/api/saju', async (req, res) => {
       success: false,
       code: "INTERNAL_ERROR",
       message: "Erro interno ao gerar a leitura."
+    });
+  }
+});
+
+// API endpoint for contact form
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    
+    // Validate request
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'Todos os campos são obrigatórios.'
+      });
+    }
+    
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'E-mail inválido.'
+      });
+    }
+    
+    // Prepare email content
+    const emailSubject = `[Contato Mestra Aurora] ${subject}`;
+    const emailBody = `
+Nova mensagem de contato:
+
+Nome: ${name}
+E-mail: ${email}
+Assunto: ${subject}
+
+Mensagem:
+${message}
+`;
+    
+    // Send email to contact@mestraaurora.xyz
+    const emailSent = await sendEmail(
+      'contact@mestraaurora.xyz',
+      emailSubject,
+      emailBody
+    );
+    
+    if (emailSent) {
+      res.json({
+        success: true,
+        message: 'Mensagem enviada com sucesso!'
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao enviar mensagem. Por favor, tente novamente.'
+      });
+    }
+  } catch (error) {
+    console.error('Error sending contact email:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erro interno ao enviar mensagem.'
     });
   }
 });

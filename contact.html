@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contato – Mestra Aurora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card: #111827;
+      --accent: #eab308;
+      --accent-soft: rgba(234, 179, 8, 0.1);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --border: #1f2933;
+      --radius-lg: 14px;
+      --radius-xl: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827 0, #020617 50%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: conic-gradient(
+        from 220deg,
+        #facc15,
+        #c4b5fd,
+        #22d3ee,
+        #f97316,
+        #facc15
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px rgba(234, 179, 8, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #0b1120, #020617);
+    }
+
+    .brand-icon span {
+      position: relative;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brand-text-title {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-size: 14px;
+      margin-bottom: 24px;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-back:hover {
+      opacity: 0.8;
+    }
+
+    .hero {
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 4vw, 32px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 900px) {
+      .grid {
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        align-items: flex-start;
+      }
+    }
+
+    .content-card {
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(17, 24, 39, 0.98)
+      );
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow:
+        0 22px 60px rgba(15, 23, 42, 0.9),
+        0 0 40px rgba(59, 130, 246, 0.25);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      opacity: 0.18;
+      background:
+        radial-gradient(circle at 10% 0, rgba(56, 189, 248, 0.5), transparent 60%),
+        radial-gradient(circle at 90% 0, rgba(234, 179, 8, 0.5), transparent 60%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 24px 0 16px;
+      color: var(--text);
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      color: #e5e7eb;
+    }
+
+    .contact-info {
+      list-style: none;
+      margin: 24px 0;
+    }
+
+    .contact-info li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #e5e7eb;
+    }
+
+    .contact-icon {
+      font-size: 18px;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .side-card {
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top, #111827, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.8);
+    }
+
+    .side-section-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .side-title-main {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .side-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .side-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #e5e7eb;
+    }
+
+    .side-bullet {
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .footer-links a:hover {
+      color: #e5e7eb;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <span>卜</span>
+        </div>
+        <div>
+          <div class="brand-text-title">Mestra Aurora</div>
+          <div class="brand-text-sub">SaJu Coreano • 4 Pilares do Destino</div>
+        </div>
+      </div>
+    </header>
+
+    <a href="/" class="nav-back">
+      ← Voltar para a página principal
+    </a>
+
+    <section class="hero">
+      <h1 class="hero-title">
+        Entre em <span>Contato</span>
+      </h1>
+      <p style="font-size: 16px; color: #e5e7eb; max-width: 600px;">
+        Tem dúvidas, sugestões ou precisa de assistência? Estamos aqui para ajudar.
+      </p>
+    </section>
+
+    <section class="grid">
+      <div class="content-card">
+        <div class="content">
+          <h2>Envie-nos uma Mensagem</h2>
+          <p>
+            Tem dúvidas, sugestões ou precisa de assistência? Preencha o formulário abaixo e nossa equipe entrará em contato.
+          </p>
+          
+          <form id="contact-form" style="margin: 24px 0;">
+            <div style="margin-bottom: 16px;">
+              <label for="name" style="display: block; margin-bottom: 6px; font-weight: 500;">Nome *</label>
+              <input type="text" id="name" name="name" required 
+                style="width: 100%; padding: 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; color: #e5e7eb; font-size: 14px;">
+            </div>
+            
+            <div style="margin-bottom: 16px;">
+              <label for="email" style="display: block; margin-bottom: 6px; font-weight: 500;">E-mail *</label>
+              <input type="email" id="email" name="email" required 
+                style="width: 100%; padding: 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; color: #e5e7eb; font-size: 14px;">
+            </div>
+            
+            <div style="margin-bottom: 16px;">
+              <label for="subject" style="display: block; margin-bottom: 6px; font-weight: 500;">Assunto *</label>
+              <input type="text" id="subject" name="subject" required 
+                style="width: 100%; padding: 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; color: #e5e7eb; font-size: 14px;">
+            </div>
+            
+            <div style="margin-bottom: 16px;">
+              <label for="message" style="display: block; margin-bottom: 6px; font-weight: 500;">Mensagem *</label>
+              <textarea id="message" name="message" rows="5" required 
+                style="width: 100%; padding: 10px; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 6px; color: #e5e7eb; font-size: 14px; resize: vertical;"></textarea>
+            </div>
+            
+            <button type="submit" 
+              style="background: var(--accent); color: #000; border: none; border-radius: 6px; padding: 12px 24px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;">
+              Enviar Mensagem
+            </button>
+            
+            <div id="form-message" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+          </form>
+
+          <h2>Informações de Contato</h2>
+          <ul class="contact-info">
+            <li>
+              <span class="contact-icon">✉️</span>
+              <div>
+                <strong>E-mail</strong><br>
+                contact@mestraaurora.xyz
+              </div>
+            </li>
+            <li>
+              <span class="contact-icon">ℹ️</span>
+              <div>
+                <strong>Resposta</strong><br>
+                Respondemos dentro de 24-48 horas úteis
+              </div>
+            </li>
+          </ul>
+
+          <h2>6. FAQ – PERGUNTAS FREQUENTES</h2>
+          <ul>
+            <li><strong>Como funciona a leitura?</strong><br>
+            O utilizador envia os dados e a Mestra Aurora gera uma interpretação personalizada utilizando IA.</li>
+            <li><strong>Por que pedem e-mail?</strong><br>
+            Para enviar a leitura e permitir referência futura. O e-mail não é partilhado com terceiros.</li>
+            <li><strong>O telefone é obrigatório?</strong><br>
+            Não. O telefone é opcional.</li>
+            <li><strong>A leitura é guardada?</strong><br>
+            Não. Apenas os dados essenciais são guardados.</li>
+            <li><strong>A leitura prevê o futuro?</strong><br>
+            Não no sentido literal. As leituras são espirituais e interpretativas.</li>
+            <li><strong>O que faço se não receber o e-mail?</strong><br>
+            Verifique spam ou utilize a página de contacto.</li>
+            <li><strong>Isto substitui um profissional?</strong><br>
+            Não. As leituras servem apenas para reflexão espiritual.</li>
+          </ul>
+        </div>
+      </div>
+
+      <aside class="side-card">
+        <div>
+          <div class="side-section-title">Assistência</div>
+          <h2 class="side-title-main">Tópicos Comuns</h2>
+        </div>
+
+        <ul class="side-list">
+          <li>
+            <span class="side-bullet">→</span>
+            <span>
+              <strong>Problemas com Leitura:</strong> 
+              Se não recebeu sua leitura por e-mail ou ela não apareceu na tela.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">→</span>
+            <span>
+              <strong>Dados Incorretos:</strong> 
+              Se encontrou erros nos dados da sua leitura.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">→</span>
+            <span>
+              <strong>Privacidade:</strong> 
+              Solicitações de acesso, correção ou eliminação de dados.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">→</span>
+            <span>
+              <strong>Técnico:</strong> 
+              Problemas com o funcionamento do site ou formulário.
+            </span>
+          </li>
+          <li>
+            <span class="side-bullet">→</span>
+            <span>
+              <strong>Parcerias:</strong> 
+              Interesse em colaborações ou integrações.
+            </span>
+          </li>
+        </ul>
+
+        <div style="margin-top: 16px; padding: 12px; background: rgba(15, 23, 42, 0.7); border-radius: 10px; border: 1px solid rgba(148, 163, 184, 0.3);">
+          <p style="font-size: 13px; color: #e5e7eb; line-height: 1.5;">
+            <strong>Importante:</strong> Para questões relacionadas a privacidade, 
+            mencione "Solicitação GDPR" no assunto do e-mail para priorização. Envie para contact@mestraaurora.xyz
+          </p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div>© 2024 Mestra Aurora • Todos os direitos reservados.</div>
+    <div class="footer-links">
+      <a href="/about.html">Sobre</a>
+      <a href="/terms.html">Termos de Uso</a>
+      <a href="/privacy-policy.html">Política de Privacidade</a>
+      <a href="/contact.html">Contato</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const submitButton = form.querySelector('button[type="submit"]');
+      const formMessage = document.getElementById('form-message');
+      
+      // Get form data
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+      };
+      
+      // Disable submit button and show loading state
+      submitButton.disabled = true;
+      submitButton.textContent = 'Enviando...';
+      
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          formMessage.style.display = 'block';
+          formMessage.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
+          formMessage.style.border = '1px solid #22c55e';
+          formMessage.style.color = '#bbf7d0';
+          formMessage.innerHTML = `<strong>Sucesso!</strong> ${result.message}`;
+          
+          // Reset form
+          form.reset();
+        } else {
+          formMessage.style.display = 'block';
+          formMessage.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+          formMessage.style.border = '1px solid #ef4444';
+          formMessage.style.color = '#fecaca';
+          formMessage.innerHTML = `<strong>Erro:</strong> ${result.message}`;
+        }
+      } catch (error) {
+        formMessage.style.display = 'block';
+        formMessage.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+        formMessage.style.border = '1px solid #ef4444';
+        formMessage.style.color = '#fecaca';
+        formMessage.innerHTML = '<strong>Erro:</strong> Falha na conexão. Por favor, tente novamente.';
+      } finally {
+        // Re-enable submit button
+        submitButton.disabled = false;
+        submitButton.textContent = 'Enviar Mensagem';
+      }
+    });
+  </script>
+</body>
+</html>
