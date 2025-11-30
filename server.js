@@ -27,7 +27,7 @@ try {
       }
     },
     aiService: {
-      apiUrl: process.env.AI_SERVICE_URL || 'https://api.openai.com/v1/chat/completions',
+      apiUrl: process.env.AI_SERVICE_URL || 'https://openrouter.ai/api/v1/chat/completions',
       apiKey: process.env.AI_SERVICE_API_KEY,
       model: process.env.AI_SERVICE_MODEL || 'x-ai/grok-4.1-fast:free'
     },

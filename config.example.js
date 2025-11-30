@@ -27,13 +27,13 @@ module.exports = {
   // AI Service configuration (for future GPT integration)
   aiService: {
     // API endpoint for AI service
-    apiUrl: 'https://api.openai.com/v1/chat/completions',
+    apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
     
     // API key for authentication
-    apiKey: 'your-openai-api-key-here',
+    apiKey: 'your-openrouter-api-key-here',
     
     // Default model to use
-    model: 'gpt-3.5-turbo'
+    model: 'x-ai/grok-4.1-fast:free'
   },
   
   // Database configuration
