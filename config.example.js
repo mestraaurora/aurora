@@ -38,7 +38,7 @@ module.exports = {
   
   // Database configuration
   database: {
-    filename: 'leads.db'
+    url: 'postgresql://postgres:your_password@db.your_supabase_project.supabase.co:5432/postgres'
   },
   
   // Server configuration

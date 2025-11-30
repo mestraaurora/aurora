@@ -3,26 +3,35 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs').promises;
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 const config = require('./config'); // Load configuration
 
-// Create database
-const db = new sqlite3.Database(config.database.filename);
+// Create database connection pool
+const dbConfig = {
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:07oJPvDGypQ3k2kJ@db.izopejswridzmxuuwozj.supabase.co:5432/postgres',
+  ssl: {
+    rejectUnauthorized: false
+  }
+};
+
+const pool = new Pool(dbConfig);
 
 // Create leads table without UNIQUE constraint on email
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS leads (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+pool.query(`
+  CREATE TABLE IF NOT EXISTS leads (
+    id SERIAL PRIMARY KEY,
     nome TEXT NOT NULL,
     email TEXT NOT NULL,
     telefone TEXT,
     sexo TEXT NOT NULL,
-    data_nascimento TEXT NOT NULL,
+    data_nascimento DATE NOT NULL,
     estado_civil TEXT,
     pergunta TEXT,
     marketing_consent BOOLEAN,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`).catch(err => {
+  console.error('Error creating leads table:', err);
 });
 
 const app = express();
@@ -389,11 +398,14 @@ app.post('/api/saju', async (req, res) => {
     const userData = req.body;
     
     // Save lead to database (without storing the reading)
-    const stmt = db.prepare(`INSERT INTO leads 
+    const insertQuery = `
+      INSERT INTO leads 
       (nome, email, telefone, sexo, data_nascimento, estado_civil, pergunta, marketing_consent)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING id
+    `;
     
-    stmt.run([
+    const values = [
       userData.nome,
       userData.email,
       userData.telefone || null,
@@ -401,15 +413,17 @@ app.post('/api/saju', async (req, res) => {
       userData.data_nascimento,
       userData.estado_civil || null,
       userData.pergunta || null,
-      userData.marketing_consent ? 1 : 0
-    ], function(err) {
-      if (err) {
+      userData.marketing_consent
+    ];
+    
+    pool.query(insertQuery, values)
+      .then(result => {
+        console.log('Lead saved with ID:', result.rows[0].id);
+      })
+      .catch(err => {
         console.error('Database error:', err);
         // Don't fail the request if we can't save the lead
-      }
-    });
-    
-    stmt.finalize();
+      });
     
     // Generate the reading
     const leitura = generateSajuReading(userData);
