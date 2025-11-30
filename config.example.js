@@ -38,7 +38,7 @@ module.exports = {
   
   // Database configuration
   database: {
-    url: 'postgresql://postgres:your_password@db.your_supabase_project.supabase.co:5432/postgres'
+    url: 'postgresql://postgres:your_password@aws-0-your-region.pooler.supabase.com:6543/postgres?pgbouncer=true'
   },
   
   // Server configuration
