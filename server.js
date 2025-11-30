@@ -32,7 +32,7 @@ try {
       model: process.env.AI_SERVICE_MODEL || 'x-ai/grok-4.1-fast:free'
     },
     database: {
-      url: process.env.DATABASE_URL
+      url: process.env.DATABASE_URL ? process.env.DATABASE_URL.replace('db.izopejswridzmxuuwozj.supabase.co', '76.76.21.41') : undefined
     },
     server: {
       port: process.env.PORT || 3001
