@@ -46,34 +46,58 @@ const dbConfig = {
   ssl: {
     rejectUnauthorized: false
   },
-  connectionTimeoutMillis: 5000,
+  connectionTimeoutMillis: 10000, // Increased timeout for better reliability
   idleTimeoutMillis: 30000,
-  // Force IPv4 to avoid ENETUNREACH errors
-  family: 4,
   // Additional connection options to improve reliability
-  max: 20,
-  allowExitOnIdle: false
+  max: 10, // Reduced pool size for better stability
+  allowExitOnIdle: false,
+  // Options for connection pooler compatibility
+  maxUses: 7500, // Close connections after 7500 queries to prevent stale connections
+  // Remove family: 4 as connection pooler should handle this automatically
 };
 
 const pool = new Pool(dbConfig);
 
 // Create leads table without UNIQUE constraint on email
-pool.query(`
-  CREATE TABLE IF NOT EXISTS leads (
-    id SERIAL PRIMARY KEY,
-    nome TEXT NOT NULL,
-    email TEXT NOT NULL,
-    telefone TEXT,
-    sexo TEXT NOT NULL,
-    data_nascimento DATE NOT NULL,
-    estado_civil TEXT,
-    pergunta TEXT,
-    marketing_consent BOOLEAN,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`).catch(err => {
-  console.error('Error creating leads table:', err);
-});
+// Add a delay and retry mechanism for better reliability with connection pooler
+setTimeout(() => {
+  pool.query(`
+    CREATE TABLE IF NOT EXISTS leads (
+      id SERIAL PRIMARY KEY,
+      nome TEXT NOT NULL,
+      email TEXT NOT NULL,
+      telefone TEXT,
+      sexo TEXT NOT NULL,
+      data_nascimento DATE NOT NULL,
+      estado_civil TEXT,
+      pergunta TEXT,
+      marketing_consent BOOLEAN,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `).catch(err => {
+    console.error('Error creating leads table:', err);
+    
+    // Retry once after 5 seconds if the first attempt fails
+    setTimeout(() => {
+      pool.query(`
+        CREATE TABLE IF NOT EXISTS leads (
+          id SERIAL PRIMARY KEY,
+          nome TEXT NOT NULL,
+          email TEXT NOT NULL,
+          telefone TEXT,
+          sexo TEXT NOT NULL,
+          data_nascimento DATE NOT NULL,
+          estado_civil TEXT,
+          pergunta TEXT,
+          marketing_consent BOOLEAN,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `).catch(err => {
+        console.error('Error creating leads table on retry:', err);
+      });
+    }, 5000);
+  });
+}, 3000); // Wait 3 seconds before attempting to create the table
 
 const app = express();
 const PORT = config.server.port;
