@@ -83,7 +83,7 @@ pool.query(`
 });
 
 const app = express();
-const PORT = config.server.port || 3001;
+const PORT = process.env.PORT || config.server.port || 3001;
 
 // Middleware
 app.use(cors());
@@ -589,14 +589,33 @@ ${message}
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-  console.log(`📄 Acesse http://localhost:${PORT} para usar o aplicativo`);
-  
-  // Show email configuration status
-  if (config.email.enabled) {
-    console.log(`📧 Email sending: ENABLED (${config.email.smtp.host}:${config.email.smtp.port})`);
-  } else {
-    console.log(`📧 Email sending: SIMULATED (set config.email.enabled=true to enable real sending)`);
-  }
+// Add a small delay to ensure database connection is established
+setTimeout(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    console.log(`📄 Acesse http://localhost:${PORT} para usar o aplicativo`);
+    
+    // Show email configuration status
+    if (config.email.enabled) {
+      console.log(`📧 Email sending: ENABLED (${config.email.smtp.host}:${config.email.smtp.port})`);
+    } else {
+      console.log(`📧 Email sending: SIMULATED (set config.email.enabled=true to enable real sending)`);
+    }
+  });
+}, 1000); // Wait 1 second before starting the server
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION! Shutting down...');
+  console.error(err.name, err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! Shutting down...');
+  console.error(err.name, err.message);
+  console.error(err.stack);
+  process.exit(1);
 });
