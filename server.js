@@ -62,6 +62,9 @@ if (config.aiService.apiKey && !config.aiService.apiUrl) {
 // Create database connection pool
 const pool = new Pool({
   connectionString: config.database.url,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // Create leads table without UNIQUE constraint on email
