@@ -152,6 +152,12 @@ function validateRequest(req) {
 
 // Mock GPT-5-nano implementation for SaJu reading generation
 function generateSajuReading(userData) {
+  console.log('Starting generateSajuReading with userData:', {
+    nome: userData.nome,
+    sexo: userData.sexo,
+    data_nascimento: userData.data_nascimento
+  });
+  
   const {
     nome,
     sexo,
@@ -336,6 +342,8 @@ function generateSajuReading(userData) {
   return reading;
 }
 
+console.log('generateSajuReading function loaded');
+
 // Helper functions for generating personalized content
 function getRelationshipStage(stage) {
   const stages = {
@@ -386,9 +394,12 @@ function getElementWisdom(element) {
 // Email sending function
 // Uses real email sending when config.email.enabled is true, otherwise simulates
 async function sendEmail(to, subject, body) {
+  console.log('sendEmail called with:', { to, subject, bodyLength: body.length });
+  
   // Check if real email sending is enabled
   if (config.email.enabled) {
     try {
+      console.log('Attempting to send real email');
       // Import nodemailer only when needed
       const nodemailer = require('nodemailer');
       
@@ -402,6 +413,8 @@ async function sendEmail(to, subject, body) {
           pass: config.email.smtp.auth.pass
         }
       });
+      
+      console.log('Transporter created, sending email');
       
       // Send real email
       const info = await transporter.sendMail({
@@ -424,17 +437,26 @@ async function sendEmail(to, subject, body) {
     console.log(`Body: ${body.substring(0, 100)}...`);
     
     // Simulate a random success/failure for demonstration
-    return Math.random() > 0.2; // 80% success rate
+    const result = Math.random() > 0.2; // 80% success rate
+    console.log('Simulated email result:', result);
+    return result;
   }
 }
 
 // API endpoint for SaJu readings
 app.post('/api/saju', async (req, res) => {
   try {
+    console.log('Received request to /api/saju');
+    
+    // Log the incoming request data (excluding sensitive information)
+    const { nome, email, sexo, data_nascimento } = req.body;
+    console.log('Request data:', { nome, sexo, data_nascimento, email: email ? `${email.substring(0, 3)}...@${email.split('@')[1]}` : 'N/A' });
+    
     // Validate request
     const errors = validateRequest(req);
     
     if (errors.length > 0) {
+      console.log('Validation errors:', errors);
       return res.status(400).json({
         success: false,
         code: "VALIDATION_ERROR",
@@ -444,6 +466,7 @@ app.post('/api/saju', async (req, res) => {
     }
     
     const userData = req.body;
+    console.log('Validation passed, processing request');
     
     // Save lead to database (without storing the reading)
     const insertQuery = `
@@ -464,6 +487,7 @@ app.post('/api/saju', async (req, res) => {
     ];
     
     try {
+      console.log('Attempting to save lead to database');
       await pool.query(insertQuery, values);
       console.log('Lead saved successfully');
     } catch (err) {
@@ -472,14 +496,18 @@ app.post('/api/saju', async (req, res) => {
     }
     
     // Generate the reading
+    console.log('Generating SaJu reading');
     const leitura = generateSajuReading(userData);
+    console.log('Reading generated successfully, length:', leitura.length);
     
     // Send email (real or simulated based on config)
+    console.log('Sending email');
     const emailSent = await sendEmail(
       userData.email,
       "Sua leitura da Mestra Aurora",
       leitura
     );
+    console.log('Email sending result:', emailSent);
     
     // Return success response
     res.json({
@@ -489,6 +517,7 @@ app.post('/api/saju', async (req, res) => {
     });
   } catch (error) {
     console.error('Error generating SaJu reading:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({
       success: false,
       code: "INTERNAL_ERROR",
