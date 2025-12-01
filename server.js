@@ -14,8 +14,8 @@ try {
     email: {
       enabled: process.env.EMAIL_ENABLED === 'true' ? true : (process.env.EMAIL_ENABLED === undefined ? true : false),
       smtp: {
-        host: process.env.SMTP_HOST || 'smtp.mailersend.net',
-        port: process.env.SMTP_PORT || 587,
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
         secure: process.env.SMTP_SECURE === 'true',
         auth: {
           user: process.env.SMTP_USER,
@@ -32,12 +32,29 @@ try {
       model: process.env.AI_SERVICE_MODEL || 'x-ai/grok-4.1-fast:free'
     },
     database: {
-      url: process.env.DATABASE_URL ? process.env.DATABASE_URL.replace('db.izopejswridzmxuuwozj.supabase.co', '76.76.21.41') : undefined
+      url: process.env.DATABASE_URL
     },
     server: {
-      port: process.env.PORT || 3001
+      port: process.env.PORT
     }
   };
+}
+
+// Validate critical environment variables
+if (!config.database.url) {
+  console.error('ERROR: DATABASE_URL environment variable is required');
+  process.exit(1);
+}
+
+if (config.email.enabled && (!config.email.smtp.host || !config.email.smtp.auth.user || !config.email.smtp.auth.pass)) {
+  console.error('ERROR: SMTP configuration is required when email is enabled');
+  console.error('Please set SMTP_HOST, SMTP_USER, and SMTP_PASS environment variables');
+  process.exit(1);
+}
+
+if (config.aiService.apiKey && !config.aiService.apiUrl) {
+  console.error('ERROR: AI_SERVICE_URL is required when AI_SERVICE_API_KEY is set');
+  process.exit(1);
 }
 
 // Create database connection pool
@@ -100,7 +117,7 @@ setTimeout(() => {
 }, 3000); // Wait 3 seconds before attempting to create the table
 
 const app = express();
-const PORT = config.server.port;
+const PORT = config.server.port || 3001;
 
 // Middleware
 app.use(cors());
