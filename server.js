@@ -186,6 +186,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Favicon route
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.png'));
+});
+
 // Validation helper function
 function validateRequest(req) {
   console.log('=== STARTING REQUEST VALIDATION ===');
