@@ -2,13 +2,13 @@ module.exports = {
   // Email configuration
   email: {
     // Set to true to enable real email sending, false to keep simulation
-    enabled: false,
+    enabled: process.env.EMAIL_ENABLED === 'true' ? true : (process.env.EMAIL_ENABLED === undefined ? false : process.env.EMAIL_ENABLED === 'false' ? false : true),
     
     // SMTP settings (only used if enabled: true)
     smtp: {
-      host: 'smtp.mailersend.net',  // MailerSend SMTP host
-      port: 587,                             // MailerSend port
-      secure: false,                         // false for port 587
+      host: process.env.SMTP_HOST || 'smtp.mailersend.net',  // MailerSend SMTP host
+      port: process.env.SMTP_PORT || 587,                             // MailerSend port
+      secure: process.env.SMTP_SECURE === 'true' || false,                         // false for port 587
       auth: {
         user: process.env.SMTP_USER || 'YOUR_MAILERSEND_USERNAME_FOR_mestraaurora.xyz',
         pass: process.env.SMTP_PASS || 'YOUR_MAILERSEND_PASSWORD_FOR_mestraaurora.xyz'
