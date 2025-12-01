@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>O que é o SaJu? – Mestra Aurora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Descubra o que é o SaJu (Four Pillars of Destiny), o antigo sistema coreano de leitura energética baseado na data e hora do nascimento."
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card: #111827;
+      --accent: #eab308;
+      --accent-soft: rgba(234, 179, 8, 0.1);
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --border: #1f2933;
+      --radius-lg: 14px;
+      --radius-xl: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827 0, #020617 50%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: conic-gradient(
+        from 220deg,
+        #facc15,
+        #c4b5fd,
+        #22d3ee,
+        #f97316,
+        #facc15
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 24px rgba(234, 179, 8, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #0b1120, #020617);
+    }
+
+    .brand-icon span {
+      position: relative;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .brand-text-title {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .brand-text-sub {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+    }
+
+    .badge {
+      align-self: flex-start;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: linear-gradient(
+        120deg,
+        rgba(15, 23, 42, 0.9),
+        rgba(30, 64, 175, 0.6)
+      );
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    .hero {
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 4vw, 32px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    .content-section {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .content-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--accent);
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0 12px 0;
+    }
+
+    .section-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .section-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      color: #fef3c7;
+      font-weight: 500;
+    }
+
+    .element-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .element-item {
+      background: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+
+    .comparison-table th {
+      text-align: left;
+      padding: 12px;
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    .comparison-table td {
+      padding: 12px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+    }
+
+    .faq-question {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .faq-answer {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #eab308, #f59e0b);
+      color: #000;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .footer-links a:hover {
+      color: #e5e7eb;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    @media (max-width: 768px) {
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .footer-links {
+        margin-top: 8px;
+      }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="02a2bd6a-a7eb-462d-a87b-da2c1cc8350c"></script>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <span>卜</span>
+        </div>
+        <div>
+          <div class="brand-text-title">Mestra Aurora</div>
+          <div class="brand-text-sub">SaJu Coreano • 4 Pilares do Destino</div>
+        </div>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Leitura automática • Estilo coreano</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1 class="hero-title">
+        O que é o <span>SaJu</span>?
+      </h1>
+      <p class="hero-subtitle">
+        Entenda o antigo sistema coreano de leitura energética que revela seu mapa único de personalidade, destino e potencial.
+      </p>
+    </section>
+
+    <section class="content">
+      <div class="content-section">
+        <h2 class="section-title">O que é o SaJu?</h2>
+        <p class="section-text">
+          O SaJu (사주), também conhecido como Four Pillars of Destiny, é um dos sistemas mais antigos e respeitados da tradição mística coreana. Baseia-se na ideia de que o momento exato do nosso nascimento carrega uma combinação única de energias — uma impressão energética que molda quem somos, como pensamos e os caminhos que naturalmente atraímos.
+        </p>
+        <p class="section-text">
+          Ao interpretar estas energias, o SaJu revela tendências profundas da personalidade, pontos fortes, pontos a desenvolver, relacionamentos, ciclos de vida e o mapa do destino individual.
+        </p>
+        <p class="section-text">
+          É um método tradicional, mas com uma precisão surpreendentemente moderna.
+        </p>
+      </div>
+
+      <div class="content-section">
+        <h2 class="section-title">Como funciona o SaJu?</h2>
+        <p class="section-text">
+          O SaJu é construído a partir de quatro pilares fundamentais, derivados da data e hora de nascimento:
+        </p>
+        
+        <h3 class="section-subtitle">Os Quatro Pilares</h3>
+        <div class="element-list">
+          <div class="element-item">Ano</div>
+          <div class="element-item">Mês</div>
+          <div class="element-item">Dia</div>
+          <div class="element-item">Hora</div>
+        </div>
+        
+        <p class="section-text">
+          Cada pilar é composto por duas energias:
+        </p>
+        <p class="section-text">
+          <span class="highlight">• um Tronco Celestial</span> (energia mais superficial, Yang/Yin)<br>
+          <span class="highlight">• um Ramo Terrestre</span> (energia interna, ligada ao ciclo animal e ao elemento profundo)
+        </p>
+        <p class="section-text">
+          Juntos, estes quatro pilares formam a tua matriz energética — um "código" que acompanha toda a tua vida.
+        </p>
+      </div>
+
+      <div class="content-section">
+        <h2 class="section-title">Os Cinco Elementos</h2>
+        <p class="section-text">
+          No coração do SaJu estão os Cinco Elementos (오행):
+        </p>
+        
+        <div class="element-list">
+          <div class="element-item">Madeira</div>
+          <div class="element-item">Fogo</div>
+          <div class="element-item">Terra</div>
+          <div class="element-item">Metal</div>
+          <div class="element-item">Água</div>
+        </div>
+        
+        <p class="section-text">
+          Cada pessoa nasce com uma combinação única destes elementos. O equilíbrio (ou desequilíbrio) entre eles influencia:
+        </p>
+        <p class="section-text">
+          • Personalidade<br>
+          • Emoções<br>
+          • Talentos naturais<br>
+          • Energia vital<br>
+          • Relacionamentos<br>
+          • Fases de sorte<br>
+          • Decisões que trazem ou retiram fluxo na vida
+        </p>
+        <p class="section-text">
+          O SaJu não te diz "quem ser", mas mostra como a tua energia funciona — para que possas viver alinhado contigo.
+        </p>
+      </div>
+
+      <div class="content-section">
+        <h2 class="section-title">O que o SaJu pode revelar sobre ti?</h2>
+        <p class="section-text">
+          O SaJu oferece uma visão profunda, clara e surpreendentemente prática sobre vários aspetos da vida:
+        </p>
+        
+        <h3 class="section-subtitle">🧠 Personalidade e essência</h3>
+        <p class="section-text">Como pensas, sentes e ages naturalmente.</p>
+        
+        <h3 class="section-subtitle">💼 Propósito e carreira</h3>
+        <p class="section-text">Quais áreas te trazem crescimento, sucesso e estabilidade.</p>
+        
+        <h3 class="section-subtitle">❤️ Relacionamentos e compatibilidade</h3>
+        <p class="section-text">Que energias combinam contigo, e quais criam atrito.</p>
+        
+        <h3 class="section-subtitle">🌀 Ciclos de vida (Daewoon)</h3>
+        <p class="section-text">Períodos de expansão, desafios, mudanças e oportunidades.</p>
+        
+        <h3 class="section-subtitle">🍀 Sorte anual</h3>
+        <p class="section-text">A energia do ano e como ela afeta o teu caminho.</p>
+        
+        <h3 class="section-subtitle">⚖️ Pontos fortes e vulnerabilidades</h3>
+        <p class="section-text">Entender onde brilhas — e onde podes equilibrar-te.</p>
+      </div>
+
+      <div class="content-section">
+        <h2 class="section-title">SaJu vs Astrologia Ocidental</h2>
+        <p class="section-text">
+          Muitas pessoas conhecem astrologia pelos signos, mas o SaJu funciona de forma diferente.
+        </p>
+        
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Astrologia Ocidental</th>
+              <th>SaJu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Baseia-se no posicionamento dos planetas</td>
+              <td>Baseia-se nos ciclos energéticos da natureza</td>
+            </tr>
+            <tr>
+              <td>Foco no signo solar</td>
+              <td>Foco em quatro pilares completos</td>
+            </tr>
+            <tr>
+              <td>Interpretação mais simbólica</td>
+              <td>Interpretação mais estrutural e energética</td>
+            </tr>
+            <tr>
+              <td>Muito popular na Europa</td>
+              <td>Muito popular na Coreia e na Ásia</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <p class="section-text">
+          O SaJu não substitui outras crenças — ele acrescenta uma nova camada de clareza.
+        </p>
+      </div>
+
+      <div class="content-section">
+        <h2 class="section-title">Como a Mestra Aurora utiliza IA para interpretar o SaJu</h2>
+        <p class="section-text">
+          Tradicionalmente, interpretar SaJu exige anos de estudo. A Mestra Aurora usa inteligência artificial para:
+        </p>
+        <p class="section-text">
+          • Analisar milhares de combinações possíveis<br>
+          • Identificar padrões energéticos<br>
+          • Traduzir conceitos complexos em linguagem clara<br>
+          • Gerar uma leitura personalizada em segundos
+        </p>
+        <p class="section-text">
+          Não é uma leitura genérica: é um diagnóstico energético feito à medida, com base nos teus dados de nascimento.
+        </p>
+      </div>
+
+      <div class="content-section">
+        <h2 class="section-title">Perguntas Frequentes (FAQ)</h2>
+        
+        <div class="faq-item">
+          <div class="faq-question">O SaJu é religioso?</div>
+          <div class="faq-answer">Não. É um sistema filosófico e energético, não ligado a qualquer religião.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">Preciso acreditar para funcionar?</div>
+          <div class="faq-answer">Não. O SaJu descreve tendências energéticas — acreditar é opcional.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">A interpretação muda ao longo da vida?</div>
+          <div class="faq-answer">Os teus pilares de nascimento não mudam. Mas os ciclos de vida e sorte anual mudam continuamente.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">A hora de nascimento é obrigatória?</div>
+          <div class="faq-answer">Ajuda a tornar a leitura mais precisa, mas não é obrigatória.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">A IA interpreta SaJu corretamente?</div>
+          <div class="faq-answer">Sim — a IA analisa mais dados do que um humano poderia fazê-lo, garantindo precisão e consistência.</div>
+        </div>
+      </div>
+
+      <div class="content-section" style="text-align: center;">
+        <h2 class="section-title">Descobre agora o teu SaJu</h2>
+        <p class="section-text">
+          Cada pessoa nasce com uma energia única.<br>
+          A Mestra Aurora ajuda-te a decifrar a tua — com clareza, beleza e profundidade.
+        </p>
+        <a href="/" class="cta-button">Faz agora a tua leitura personalizada</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>© 2024 Mestra Aurora • Todos os direitos reservados.</div>
+    <div class="footer-links">
+      <a href="/saju.html">O que é o SaJu?</a>
+      <a href="/about.html">Sobre</a>
+      <a href="/terms.html" id="termos">Termos de Uso</a>
+      <a href="/privacy-policy.html" id="privacidade">Política de Privacidade</a>
+      <a href="/contact.html" id="contato">Contato</a>
+    </div>
+  </footer>
+</body>
+</html>
