@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs').promises;
 const { Pool } = require('pg');
+const axios = require('axios');
+
 // Load configuration with fallback to environment variables
 let config;
 try {
@@ -160,13 +162,76 @@ function validateRequest(req) {
   return errors;
 }
 
-// Mock GPT-5-nano implementation for SaJu reading generation
-function generateSajuReading(userData) {
+// AI-powered implementation for SaJu reading generation
+async function generateSajuReading(userData) {
   console.log('Starting generateSajuReading with userData:', {
     nome: userData.nome,
     sexo: userData.sexo,
     data_nascimento: userData.data_nascimento
   });
+  
+  // Check if AI service is configured
+  if (!config.aiService.apiKey) {
+    console.log('AI service not configured, falling back to mock implementation');
+    return generateMockSajuReading(userData);
+  }
+  
+  try {
+    // Prepare the prompt for the AI
+    const prompt = createPromptForSajuReading(userData);
+    
+    // Make API call to OpenRouter
+    console.log('Calling AI service with prompt length:', prompt.length);
+    
+    const response = await axios.post(
+      config.aiService.apiUrl,
+      {
+        model: config.aiService.model,
+        messages: [
+          {
+            role: "system",
+            content: "Você é Mestra Aurora, uma especialista em leituras de destino coreano SaJu. Gere leituras completas e personalizadas com base nas informações fornecidas."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${config.aiService.apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://mestraaurora.xyz',
+          'X-Title': 'Mestra Aurora SaJu Reader'
+        }
+      }
+    );
+    
+    console.log('AI service response received');
+    
+    if (response.data && response.data.choices && response.data.choices.length > 0) {
+      const aiReading = response.data.choices[0].message.content;
+      console.log('AI reading generated successfully, length:', aiReading.length);
+      return aiReading;
+    } else {
+      console.error('Unexpected AI response format:', response.data);
+      throw new Error('Invalid AI response format');
+    }
+  } catch (error) {
+    console.error('Error calling AI service:', error.message);
+    console.error('Stack trace:', error.stack);
+    // Fallback to mock implementation if AI service fails
+    console.log('Falling back to mock implementation');
+    return generateMockSajuReading(userData);
+  }
+}
+
+// Mock implementation as fallback
+function generateMockSajuReading(userData) {
+  console.log('Using mock SaJu reading generation');
   
   const {
     nome,
@@ -352,6 +417,56 @@ function generateSajuReading(userData) {
   return reading;
 }
 
+// Helper function to create prompt for AI
+function createPromptForSajuReading(userData) {
+  const {
+    nome,
+    sexo,
+    data_nascimento,
+    tipo_calendario = 'solar',
+    hora_nascimento,
+    estado_civil,
+    tempo_relacionamento,
+    pergunta
+  } = userData;
+  
+  let prompt = `Gere uma leitura completa de SaJu (Quatro Pilares do Destino Coreano) para ${nome}, nascido(a) em ${data_nascimento}`;
+  
+  if (hora_nascimento) {
+    prompt += ` às ${hora_nascimento} horas`;
+  }
+  
+  prompt += `. Sexo: ${sexo}, Tipo de calendário: ${tipo_calendario}`;
+  
+  if (estado_civil) {
+    prompt += `, Estado civil: ${estado_civil}`;
+    if (tempo_relacionamento) {
+      prompt += ` há ${tempo_relacionamento}`;
+    }
+  }
+  
+  if (pergunta) {
+    prompt += `\n\nPergunta específica do cliente: "${pergunta}"`;
+  }
+  
+  prompt += `\n\nPor favor, forneça uma leitura completa e personalizada seguindo esta estrutura:
+1. Identidade Energética
+2. Distribuição dos 5 Elementos
+3. Personalidade e Estilo de Vida
+4. Carreira, Dinheiro e Oportunidades
+5. Amor e Relacionamentos
+6. Saúde Energética
+7. Previsão do Próximo Ano
+8. Tendências dos Próximos 5 Anos
+9. Cores, Direções e Ambientes Favoráveis
+10. Resposta à pergunta específica (se houver)
+11. Conclusão emocional
+
+Use uma linguagem acolhedora, empática e espiritual. Evite clichês e seja específico com base nas informações fornecidas. Inclua insights únicos sobre o caráter e o destino da pessoa.`;
+  
+  return prompt;
+}
+
 console.log('generateSajuReading function loaded');
 
 // Helper functions for generating personalized content
@@ -514,7 +629,7 @@ app.post('/api/saju', async (req, res) => {
     
     // Generate the reading
     console.log('Generating SaJu reading');
-    const leitura = generateSajuReading(userData);
+    const leitura = await generateSajuReading(userData);
     console.log('Reading generated successfully, length:', leitura.length);
     
     // Send email (real or simulated based on config)
