@@ -130,20 +130,25 @@ app.get('/health', (req, res) => {
 
 // Validation helper function
 function validateRequest(req) {
+  console.log('=== STARTING REQUEST VALIDATION ===');
   const errors = [];
   
+  console.log('Step V1: Validating nome field');
   if (!req.body.nome || req.body.nome.trim() === '') {
     errors.push('Nome é obrigatório');
   }
   
+  console.log('Step V2: Validating sexo field');
   if (!req.body.sexo || (req.body.sexo !== 'masculino' && req.body.sexo !== 'feminino')) {
     errors.push('Sexo é obrigatório e deve ser "masculino" ou "feminino"');
   }
   
+  console.log('Step V3: Validating data_nascimento field');
   if (!req.body.data_nascimento || req.body.data_nascimento.trim() === '') {
     errors.push('Data de nascimento é obrigatória');
   }
   
+  console.log('Step V4: Validating email field');
   if (!req.body.email || req.body.email.trim() === '') {
     errors.push('E-mail é obrigatório');
   } else {
@@ -154,9 +159,16 @@ function validateRequest(req) {
     }
   }
   
+  console.log('Step V5: Validating marketing_consent field');
   // Marketing consent is now required
   if (req.body.marketing_consent !== true) {
     errors.push('Você precisa concordar com o recebimento de comunicações para receber a leitura');
+  }
+  
+  console.log('=== REQUEST VALIDATION COMPLETE ===');
+  console.log('Validation result:', errors.length === 0 ? 'PASSED' : 'FAILED', 'with', errors.length, 'errors');
+  if (errors.length > 0) {
+    console.log('Validation errors:', errors);
   }
   
   return errors;
@@ -164,24 +176,39 @@ function validateRequest(req) {
 
 // AI-powered implementation for SaJu reading generation
 async function generateSajuReading(userData) {
-  console.log('Starting generateSajuReading with userData:', {
+  console.log('=== STARTING SAJU READING GENERATION ===');
+  console.log('Input userData:', {
     nome: userData.nome,
     sexo: userData.sexo,
     data_nascimento: userData.data_nascimento
   });
   
   // Check if AI service is configured
+  console.log('Step A: Checking AI service configuration');
+  console.log('AI Service config:', {
+    hasApiKey: !!config.aiService.apiKey,
+    apiUrl: config.aiService.apiUrl,
+    model: config.aiService.model
+  });
+  
   if (!config.aiService.apiKey) {
-    console.log('AI service not configured, falling back to mock implementation');
+    console.log('Step A RESULT: AI service not configured, falling back to mock implementation');
     return generateMockSajuReading(userData);
   }
   
   try {
+    console.log('Step B: Preparing the prompt for the AI');
     // Prepare the prompt for the AI
     const prompt = createPromptForSajuReading(userData);
+    console.log('Step B COMPLETE: Prompt created with length:', prompt.length);
     
     // Make API call to OpenRouter
-    console.log('Calling AI service with prompt length:', prompt.length);
+    console.log('Step C: Calling AI service');
+    console.log('AI Request details:', {
+      url: config.aiService.apiUrl,
+      model: config.aiService.model,
+      promptPreview: prompt.substring(0, 100) + '...'
+    });
     
     const response = await axios.post(
       config.aiService.apiUrl,
@@ -210,28 +237,43 @@ async function generateSajuReading(userData) {
       }
     );
     
-    console.log('AI service response received');
+    console.log('Step C COMPLETE: AI service response received');
+    console.log('AI Response status:', response.status);
+    console.log('AI Response headers:', Object.keys(response.headers));
     
     if (response.data && response.data.choices && response.data.choices.length > 0) {
       const aiReading = response.data.choices[0].message.content;
-      console.log('AI reading generated successfully, length:', aiReading.length);
+      console.log('Step D: AI reading extracted successfully, length:', aiReading.length);
+      console.log('=== SAJU READING GENERATION COMPLETED SUCCESSFULLY ===');
       return aiReading;
     } else {
-      console.error('Unexpected AI response format:', response.data);
+      console.error('Step D FAILED: Unexpected AI response format:', response.data);
       throw new Error('Invalid AI response format');
     }
   } catch (error) {
-    console.error('Error calling AI service:', error.message);
+    console.error('Step C FAILED: Error calling AI service:', error.message);
+    console.error('Error details:', {
+      code: error.code,
+      response: error.response ? {
+        status: error.response.status,
+        data: error.response.data
+      } : null
+    });
     console.error('Stack trace:', error.stack);
     // Fallback to mock implementation if AI service fails
-    console.log('Falling back to mock implementation');
+    console.log('Step E: Falling back to mock implementation');
     return generateMockSajuReading(userData);
   }
 }
 
 // Mock implementation as fallback
 function generateMockSajuReading(userData) {
-  console.log('Using mock SaJu reading generation');
+  console.log('=== USING MOCK SAJU READING GENERATION ===');
+  console.log('Input userData:', {
+    nome: userData.nome,
+    sexo: userData.sexo,
+    data_nascimento: userData.data_nascimento
+  });
   
   const {
     nome,
@@ -245,17 +287,22 @@ function generateMockSajuReading(userData) {
   } = userData;
 
   // Parse birth date
+  console.log('Step M1: Parsing birth date');
   const birthDate = new Date(data_nascimento);
   const day = birthDate.getDate();
   const month = birthDate.getMonth() + 1;
   const year = birthDate.getFullYear();
+  console.log('Step M1 COMPLETE: Birth date parsed:', { day, month, year });
   
   // Simple element assignment based on birth year (this is a simplified version)
+  console.log('Step M2: Assigning element based on birth year');
   const elements = ['Madeira', 'Fogo', 'Terra', 'Metal', 'Água'];
   const elementIndex = year % 5;
   const element = elements[elementIndex];
+  console.log('Step M2 COMPLETE: Element assigned:', element);
   
   // Element characteristics
+  console.log('Step M3: Getting element characteristics');
   const elementCharacteristics = {
     'Madeira': {
       metaphor: 'a árvore que cresce em direção ao céu',
@@ -320,8 +367,10 @@ function generateMockSajuReading(userData) {
   };
   
   const char = elementCharacteristics[element];
+  console.log('Step M3 COMPLETE: Element characteristics retrieved');
   
   // Generate personalized reading
+  console.log('Step M4: Generating personalized reading');
   let reading = `🔮 Leitura Completa de SaJu – Mestra Aurora\n\n`;
   reading += `Querido(a) **${nome}**, com base nos Quatro Pilares do Destino Coreano calculados a partir da sua data de nascimento (${day}/${month}/${year})`;
   
@@ -413,6 +462,9 @@ function generateMockSajuReading(userData) {
   reading += `Confie em sua jornada e continue cultivando sua luz interior.\n\n`;
   reading += `_Que os ventos do destino soprem a seu favor._\n`;
   reading += `_Mestra Aurora_`;
+  
+  console.log('Step M4 COMPLETE: Reading generated with length:', reading.length);
+  console.log('=== MOCK SAJU READING GENERATION COMPLETED ===');
   
   return reading;
 }
@@ -519,16 +571,26 @@ function getElementWisdom(element) {
 // Email sending function
 // Uses real email sending when config.email.enabled is true, otherwise simulates
 async function sendEmail(to, subject, body) {
-  console.log('sendEmail called with:', { to, subject, bodyLength: body.length });
+  console.log('=== EMAIL SENDING FUNCTION STARTED ===');
+  console.log('Email details:', { to, subject, bodyLength: body.length });
   
   // Check if real email sending is enabled
+  console.log('Step E1: Checking email configuration');
+  console.log('Email config:', {
+    enabled: config.email.enabled,
+    hasSmtpHost: !!config.email.smtp.host,
+    hasSmtpUser: !!config.email.smtp.auth.user,
+    hasSmtpPass: !!config.email.smtp.auth.pass
+  });
+  
   if (config.email.enabled) {
     try {
-      console.log('Attempting to send real email');
+      console.log('Step E2: Attempting to send real email');
       // Import nodemailer only when needed
       const nodemailer = require('nodemailer');
       
       // Create transporter with SMTP settings from config
+      console.log('Step E3: Creating transporter');
       const transporter = nodemailer.createTransport({
         host: config.email.smtp.host,
         port: config.email.smtp.port,
@@ -539,7 +601,7 @@ async function sendEmail(to, subject, body) {
         }
       });
       
-      console.log('Transporter created, sending email');
+      console.log('Step E4: Transporter created, sending email');
       
       // Send real email
       const info = await transporter.sendMail({
@@ -549,21 +611,32 @@ async function sendEmail(to, subject, body) {
         text: body
       });
       
+      console.log('Step E5: Email sent successfully');
       console.log('📧 Email sent successfully:', info.messageId);
+      console.log('=== EMAIL SENDING FUNCTION COMPLETED SUCCESSFULLY ===');
       return true;
     } catch (error) {
-      console.error('❌ Error sending email:', error);
+      console.error('Step E5 FAILED: Error sending email:', error);
+      console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        code: error.code,
+        stack: error.stack
+      });
+      console.log('=== EMAIL SENDING FUNCTION FAILED ===');
       return false;
     }
   } else {
     // Simulate email sending (current behavior)
+    console.log('Step E2: Simulating email sending (config.email.enabled is false)');
     console.log(`📧 Simulating email to: ${to}`);
     console.log(`Subject: ${subject}`);
     console.log(`Body: ${body.substring(0, 100)}...`);
     
     // Simulate a random success/failure for demonstration
     const result = Math.random() > 0.2; // 80% success rate
-    console.log('Simulated email result:', result);
+    console.log('Step E3: Simulated email result:', result);
+    console.log('=== EMAIL SENDING FUNCTION COMPLETED (SIMULATED) ===');
     return result;
   }
 }
@@ -578,17 +651,23 @@ app.post('/api/saju', async (req, res) => {
   console.log('Body keys:', Object.keys(req.body));
   
   try {
-    console.log('Received request to /api/saju');
+    console.log('Step 1: Received request to /api/saju');
     
     // Log the incoming request data (excluding sensitive information)
     const { nome, email, sexo, data_nascimento } = req.body;
-    console.log('Request data:', { nome, sexo, data_nascimento, email: email ? `${email.substring(0, 3)}...@${email.split('@')[1]}` : 'N/A' });
+    console.log('Step 2: Request data extracted:', { 
+      nome, 
+      sexo, 
+      data_nascimento, 
+      email: email ? `${email.substring(0, 3)}...@${email.split('@')[1]}` : 'N/A' 
+    });
     
     // Validate request
+    console.log('Step 3: Starting request validation');
     const errors = validateRequest(req);
     
     if (errors.length > 0) {
-      console.log('Validation errors:', errors);
+      console.log('Step 3 FAILED: Validation errors:', errors);
       return res.status(400).json({
         success: false,
         code: "VALIDATION_ERROR",
@@ -597,10 +676,11 @@ app.post('/api/saju', async (req, res) => {
       });
     }
     
+    console.log('Step 3 PASSED: Validation passed');
     const userData = req.body;
-    console.log('Validation passed, processing request');
     
     // Save lead to database (without storing the reading)
+    console.log('Step 4: Saving lead to database');
     const insertQuery = `
       INSERT INTO leads 
       (nome, email, telefone, sexo, data_nascimento, estado_civil, pergunta, marketing_consent)
@@ -619,37 +699,43 @@ app.post('/api/saju', async (req, res) => {
     ];
     
     try {
-      console.log('Attempting to save lead to database');
+      console.log('Step 4: Attempting to save lead to database with values:', values.map((v, i) => `param${i+1}: ${v}`).join(', '));
       await pool.query(insertQuery, values);
-      console.log('Lead saved successfully');
+      console.log('Step 4 PASSED: Lead saved successfully');
     } catch (err) {
-      console.error('Database error:', err);
+      console.error('Step 4 FAILED: Database error:', err);
       // Don't fail the request if we can't save the lead
     }
     
     // Generate the reading
-    console.log('Generating SaJu reading');
+    console.log('Step 5: Generating SaJu reading');
     const leitura = await generateSajuReading(userData);
-    console.log('Reading generated successfully, length:', leitura.length);
+    console.log('Step 5 PASSED: Reading generated successfully, length:', leitura.length);
     
     // Send email (real or simulated based on config)
-    console.log('Sending email');
+    console.log('Step 6: Sending email to:', userData.email);
     const emailSent = await sendEmail(
       userData.email,
       "Sua leitura da Mestra Aurora",
       leitura
     );
-    console.log('Email sending result:', emailSent);
+    console.log('Step 6 COMPLETE: Email sending result:', emailSent);
     
     // Return success response
+    console.log('Step 7: Sending success response to client');
     res.json({
       success: true,
       leitura: leitura,
       email_sent: emailSent
     });
+    console.log('Step 7 COMPLETE: Response sent successfully');
   } catch (error) {
-    console.error('Error generating SaJu reading:', error);
-    console.error('Error stack:', error.stack);
+    console.error('!!! CRITICAL ERROR: Error generating SaJu reading !!!');
+    console.error('Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     res.status(500).json({
       success: false,
       code: "INTERNAL_ERROR",
