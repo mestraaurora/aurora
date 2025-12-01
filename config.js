@@ -26,8 +26,8 @@ module.exports = {
     // API endpoint for AI service
     apiUrl: process.env.AI_SERVICE_URL || 'https://openrouter.ai/api/v1/chat/completions',
     
-    // API key for authentication
-    apiKey: process.env.AI_SERVICE_API_KEY || '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',
+    // API key for authentication (should be set via environment variable only)
+    apiKey: process.env.AI_SERVICE_API_KEY,
     
     // Default model to use
     model: process.env.AI_SERVICE_MODEL || 'x-ai/grok-4.1-fast:free'
