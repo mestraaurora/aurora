@@ -58,63 +58,29 @@ if (config.aiService.apiKey && !config.aiService.apiUrl) {
 }
 
 // Create database connection pool
-const dbConfig = {
+const pool = new Pool({
   connectionString: config.database.url,
-  ssl: {
-    rejectUnauthorized: false
-  },
-  connectionTimeoutMillis: 10000, // Increased timeout for better reliability
-  idleTimeoutMillis: 30000,
-  // Additional connection options to improve reliability
-  max: 10, // Reduced pool size for better stability
-  allowExitOnIdle: false,
-  // Options for connection pooler compatibility
-  maxUses: 7500, // Close connections after 7500 queries to prevent stale connections
-  // Remove family: 4 as connection pooler should handle this automatically
-};
-
-const pool = new Pool(dbConfig);
+});
 
 // Create leads table without UNIQUE constraint on email
-// Add a delay and retry mechanism for better reliability with connection pooler
-setTimeout(() => {
-  pool.query(`
-    CREATE TABLE IF NOT EXISTS leads (
-      id SERIAL PRIMARY KEY,
-      nome TEXT NOT NULL,
-      email TEXT NOT NULL,
-      telefone TEXT,
-      sexo TEXT NOT NULL,
-      data_nascimento DATE NOT NULL,
-      estado_civil TEXT,
-      pergunta TEXT,
-      marketing_consent BOOLEAN,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `).catch(err => {
-    console.error('Error creating leads table:', err);
-    
-    // Retry once after 5 seconds if the first attempt fails
-    setTimeout(() => {
-      pool.query(`
-        CREATE TABLE IF NOT EXISTS leads (
-          id SERIAL PRIMARY KEY,
-          nome TEXT NOT NULL,
-          email TEXT NOT NULL,
-          telefone TEXT,
-          sexo TEXT NOT NULL,
-          data_nascimento DATE NOT NULL,
-          estado_civil TEXT,
-          pergunta TEXT,
-          marketing_consent BOOLEAN,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `).catch(err => {
-        console.error('Error creating leads table on retry:', err);
-      });
-    }, 5000);
-  });
-}, 3000); // Wait 3 seconds before attempting to create the table
+pool.query(`
+  CREATE TABLE IF NOT EXISTS leads (
+    id SERIAL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL,
+    telefone TEXT,
+    sexo TEXT NOT NULL,
+    data_nascimento TEXT NOT NULL,
+    estado_civil TEXT,
+    pergunta TEXT,
+    marketing_consent BOOLEAN,
+    created_at TIMESTAMP DEFAULT NOW()
+  )
+`).then(() => {
+  console.log('Connected to Render Postgres');
+}).catch(err => {
+  console.error('Failed to connect to Postgres:', err.message);
+});
 
 const app = express();
 const PORT = config.server.port || 3001;
@@ -484,7 +450,6 @@ app.post('/api/saju', async (req, res) => {
       INSERT INTO leads 
       (nome, email, telefone, sexo, data_nascimento, estado_civil, pergunta, marketing_consent)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING id
     `;
     
     const values = [
@@ -498,14 +463,13 @@ app.post('/api/saju', async (req, res) => {
       userData.marketing_consent
     ];
     
-    pool.query(insertQuery, values)
-      .then(result => {
-        console.log('Lead saved with ID:', result.rows[0].id);
-      })
-      .catch(err => {
-        console.error('Database error:', err);
-        // Don't fail the request if we can't save the lead
-      });
+    try {
+      await pool.query(insertQuery, values);
+      console.log('Lead saved successfully');
+    } catch (err) {
+      console.error('Database error:', err);
+      // Don't fail the request if we can't save the lead
+    }
     
     // Generate the reading
     const leitura = generateSajuReading(userData);
