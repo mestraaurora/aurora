@@ -90,11 +90,47 @@ pool.query(`
 const app = express();
 const PORT = process.env.PORT || config.server.port || 3001;
 
-// Middleware
+// Security middleware to handle common attack patterns
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+  // Log all requests for monitoring
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} from ${req.ip}`);
+  
+  // Block common WordPress exploit attempts
+  if (req.url.includes('wp-admin') || req.url.includes('wp-content') || req.url.includes('wp-includes')) {
+    console.log(`⚠️  BLOCKED WordPress exploit attempt: ${req.method} ${req.url} from ${req.ip}`);
+    return res.status(404).send('Not Found');
+  }
+  
+  // Block other common exploit patterns
+  const exploitPatterns = [
+    '/admin',
+    '/manager',
+    '/phpmyadmin',
+    '/setup-config.php',
+    '/install',
+    '/backup',
+    '/config'
+  ];
+  
+  for (const pattern of exploitPatterns) {
+    if (req.url.includes(pattern)) {
+      console.log(`⚠️  BLOCKED common exploit attempt: ${req.method} ${req.url} from ${req.ip}`);
+      return res.status(404).send('Not Found');
+    }
+  }
+  
   next();
 });
+
+// Additional security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
+
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
