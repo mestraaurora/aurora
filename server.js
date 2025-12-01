@@ -86,6 +86,10 @@ const app = express();
 const PORT = process.env.PORT || config.server.port || 3001;
 
 // Middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -114,6 +118,12 @@ app.get('/contact.html', (req, res) => {
 // Serve the about page
 app.get('/about.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'about.html'));
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  console.log('Health check endpoint hit');
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // Validation helper function
@@ -445,6 +455,13 @@ async function sendEmail(to, subject, body) {
 
 // API endpoint for SaJu readings
 app.post('/api/saju', async (req, res) => {
+  console.log('=== NEW REQUEST TO /api/saju ===');
+  console.log('Timestamp:', new Date().toISOString());
+  console.log('Headers:', req.headers);
+  console.log('Method:', req.method);
+  console.log('URL:', req.url);
+  console.log('Body keys:', Object.keys(req.body));
+  
   try {
     console.log('Received request to /api/saju');
     
