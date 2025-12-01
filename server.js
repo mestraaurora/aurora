@@ -92,8 +92,18 @@ const PORT = process.env.PORT || config.server.port || 3001;
 
 // Security middleware to handle common attack patterns
 app.use((req, res, next) => {
+  // Set general CORS headers
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
   // Log all requests for monitoring
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url} from ${req.ip}`);
+  
+  // Handle preflight OPTIONS requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   
   // Block common WordPress exploit attempts
   if (req.url.includes('wp-admin') || req.url.includes('wp-content') || req.url.includes('wp-includes')) {
@@ -131,7 +141,16 @@ app.use((req, res, next) => {
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://www.mestraaurora.xyz',
+    'https://mestraaurora.xyz',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('.'));
@@ -682,12 +701,22 @@ async function sendEmail(to, subject, body) {
 
 // API endpoint for SaJu readings
 app.post('/api/saju', async (req, res) => {
+  // Set CORS headers specifically for this endpoint
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  
   console.log('=== NEW REQUEST TO /api/saju ===');
   console.log('Timestamp:', new Date().toISOString());
   console.log('Headers:', req.headers);
   console.log('Method:', req.method);
   console.log('URL:', req.url);
   console.log('Body keys:', Object.keys(req.body));
+  
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
   
   try {
     console.log('Step 1: Received request to /api/saju');
