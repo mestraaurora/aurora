@@ -321,6 +321,21 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     ttq.load('D4N2O8RC77U1VUV8UJC0');
     ttq.page();
+
+    // TikTok Pixel ViewContent event
+    if (typeof ttq !== 'undefined') {
+      ttq.track('ViewContent', {
+        contents: [
+          {
+            content_id: 'contact-page',
+            content_type: 'page',
+            content_name: 'Mestra Aurora - Contato'
+          }
+        ],
+        value: 0,
+        currency: 'USD'
+      });
+    }
   }(window, document, 'ttq');
   </script>
   <!-- TikTok Pixel Code End -->
@@ -496,7 +511,30 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </footer>
 
   <script>
-    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    // Track form initiation for TikTok Pixel
+    let formInitiated = false;
+    const contactForm = document.getElementById('contact-form');
+    const formFields = contactForm.querySelectorAll('input, textarea');
+    formFields.forEach(field => {
+      field.addEventListener('focus', function() {
+        if (!formInitiated && typeof ttq !== 'undefined') {
+          formInitiated = true;
+          ttq.track('InitiateCheckout', {
+            contents: [
+              {
+                content_id: 'contact-form',
+                content_type: 'form',
+                content_name: 'Contact Form Initiation'
+              }
+            ],
+            value: 0,
+            currency: 'USD'
+          });
+        }
+      });
+    });
+    
+    contactForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const form = e.target;
@@ -532,6 +570,21 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           formMessage.style.border = '1px solid #22c55e';
           formMessage.style.color = '#bbf7d0';
           formMessage.innerHTML = `<strong>Sucesso!</strong> ${result.message}`;
+          
+          // TikTok Pixel event tracking - CompleteRegistration event
+          if (typeof ttq !== 'undefined') {
+            ttq.track('CompleteRegistration', {
+              contents: [
+                {
+                  content_id: formData.email, // Using email as content ID
+                  content_type: 'contact_form',
+                  content_name: 'Contact Form Submission'
+                }
+              ],
+              value: 1,
+              currency: 'USD'
+            });
+          }
           
           // Reset form
           form.reset();

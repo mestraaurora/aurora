@@ -685,6 +685,45 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     ttq.load('D4N2O8RC77U1VUV8UJC0');
     ttq.page();
+
+    // TikTok Pixel ViewContent event
+    if (typeof ttq !== 'undefined') {
+      ttq.track('ViewContent', {
+        contents: [
+          {
+            content_id: 'saju-reading-page',
+            content_type: 'page',
+            content_name: 'Mestra Aurora - Leitura do Destino Coreano'
+          }
+        ],
+        value: 0,
+        currency: 'USD'
+      });
+    }
+
+    // add this before event code to all pages where PII data postback is expected and appropriate 
+    // Note: In a real implementation, you would replace the placeholders with actual hashed values
+    // ttq.identify({
+    //   "email": "<hashed_email_address>", // string. The email of the customer if available. It must be hashed with SHA-256 on the client side.
+    //   "phone_number": "<hashed_phone_number>", // string. The phone number of the customer if available. It must be hashed with SHA-256 on the client side.
+    //   "external_id": "<hashed_external_id>" // string. Any unique identifier, such as loyalty membership IDs, user IDs, and external cookie IDs.It must be hashed with SHA-256 on the client side.
+    // });
+
+    // Example event tracking - these would be triggered based on user actions
+    // ttq.track('ViewContent', {
+    //   "contents": [
+    //     {
+    //       "content_id": "<content_identifier>", // string. ID of the product. Example: "1077218".
+    //       "content_type": "<content_type>", // string. Either product or product_group.
+    //       "content_name": "<content_name>" // string. The name of the page or product. Example: "shirt".
+    //     }
+    //   ],
+    //   "value": "<content_value>", // number. Value of the order or items sold. Example: 100.
+    //   "currency": "<content_currency>" // string. The 4217 currency code. Example: "USD".
+    // });
+
+    // Additional events would be implemented based on specific user interactions
+    // Such as form submissions, button clicks, etc.
   }(window, document, 'ttq');
   </script>
   <!-- TikTok Pixel Code End -->
@@ -1058,6 +1097,28 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     const resultPlaceholder = document.getElementById("result-placeholder");
     const resultText = document.getElementById("result-text");
 
+    // Track form initiation for TikTok Pixel
+    let formInitiated = false;
+    const formFields = form.querySelectorAll('input, select, textarea');
+    formFields.forEach(field => {
+      field.addEventListener('focus', function() {
+        if (!formInitiated && typeof ttq !== 'undefined') {
+          formInitiated = true;
+          ttq.track('InitiateCheckout', {
+            contents: [
+              {
+                content_id: 'saju-reading-form',
+                content_type: 'form',
+                content_name: 'SaJu Reading Form Initiation'
+              }
+            ],
+            value: 0,
+            currency: 'USD'
+          });
+        }
+      });
+    });
+
     function setLoading(isLoading) {
       if (isLoading) {
         btnSubmit.disabled = true;
@@ -1236,6 +1297,21 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           top: resultPlaceholder.offsetTop - 40,
           behavior: "smooth"
         });
+
+        // TikTok Pixel event tracking - CompleteRegistration event
+        if (typeof ttq !== 'undefined') {
+          ttq.track('CompleteRegistration', {
+            contents: [
+              {
+                content_id: payload.email, // Using email as content ID
+                content_type: 'user_registration',
+                content_name: 'SaJu Reading Registration'
+              }
+            ],
+            value: 1,
+            currency: 'USD'
+          });
+        }
       } catch (error) {
         console.error(error);
         resultText.textContent =

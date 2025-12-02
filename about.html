@@ -255,6 +255,21 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     ttq.load('D4N2O8RC77U1VUV8UJC0');
     ttq.page();
+
+    // TikTok Pixel ViewContent event
+    if (typeof ttq !== 'undefined') {
+      ttq.track('ViewContent', {
+        contents: [
+          {
+            content_id: 'about-page',
+            content_type: 'page',
+            content_name: 'Mestra Aurora - Sobre'
+          }
+        ],
+        value: 0,
+        currency: 'USD'
+      });
+    }
   }(window, document, 'ttq');
   </script>
   <!-- TikTok Pixel Code End -->
